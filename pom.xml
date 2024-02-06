@@ -3,11 +3,17 @@
     <groupId>com.apimodel</groupId>
     <artifactId>apimodel</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <modules>
+        <module>apimodel-server</module>
+        <module>apimodel-rest</module>
+    </modules>
+
 
     <build>
         <pluginManagement>
