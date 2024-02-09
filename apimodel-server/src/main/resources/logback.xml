@@ -11,4 +11,5 @@
     </root>
 
     <logger name="com.apimodel" level="INFO"/>
+    <logger name="org.eclipse.jetty" level="WARN"/>
 </configuration>
