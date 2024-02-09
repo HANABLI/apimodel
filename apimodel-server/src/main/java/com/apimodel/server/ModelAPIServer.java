@@ -2,7 +2,7 @@ package com.apimodel.server;
 
 
 import com.apimodel.rest.ApiApplication;
-import jakarta.servlet.ServletContext;
+
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -13,6 +13,7 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.Optional.ofNullable;
 import static org.eclipse.jetty.http.HttpScheme.HTTPS;
 import static org.eclipse.jetty.http.HttpVersion.HTTP_1_1;
 import static org.eclipse.jetty.servlet.ServletContextHandler.NO_SESSIONS;
@@ -22,10 +23,10 @@ public class ModelAPIServer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelAPIServer.class);
 
     public static void main(String...  args) throws Exception {
-
+        int port = ofNullable(System.getProperty("port")).map(Integer::parseInt).orElse(8443);
         HttpConfiguration httpConfiguration = new HttpConfiguration();
         httpConfiguration.setSecureScheme(HTTPS.asString());
-        httpConfiguration.setSecurePort(8443);
+        httpConfiguration.setSecurePort(port);
         httpConfiguration.addCustomizer(new SecureRequestCustomizer());
         httpConfiguration.setSendXPoweredBy(false);
 
@@ -58,7 +59,7 @@ public class ModelAPIServer {
 
         apiServletHolder.setInitParameter("jakarta.ws.rs.Application", ApiApplication.class.getName());
 
-        LOGGER.info("Server starting");
+        LOGGER.info("Server starting in port : {}", port); //Using string interpolation
         server.start();
         server.join();
     }
