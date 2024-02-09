@@ -1,6 +1,7 @@
 package com.apimodel.server;
 
 
+import com.apimodel.rest.ApiApplication;
 import jakarta.servlet.ServletContext;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -55,7 +56,7 @@ public class ModelAPIServer {
         ServletHolder apiServletHolder = servletContextHandler.addServlet(ServletContainer.class, "/api/*");
 
 
-        apiServletHolder.setInitParameter("jakarta.ws.rs.Application", "TODO");
+        apiServletHolder.setInitParameter("jakarta.ws.rs.Application", ApiApplication.class.getName());
 
         LOGGER.info("Server starting");
         server.start();

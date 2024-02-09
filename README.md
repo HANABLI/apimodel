@@ -8,3 +8,8 @@ $ curl -k -vvv https://localhost:8443/  {-k param added to ignore secure mode}
 #-----------------------------------------------------
 $ curl --cacert modelapi-server/src/main/resources/certs/ca.crt -vvv https://localhost:8443/ {curl using the certificate on option}
 #-----------------------------------------------------
+git add -p to manage changes
+#-----------------------------------------------------
+Jakarta RESTful Web Services is the Jakarta EE API for RESTful web services. It provides support for building web services using representational state transfer, or "REST," using annotations.
+#-----------------------------------------------------
+jersey hk2 is used for dependency injection
