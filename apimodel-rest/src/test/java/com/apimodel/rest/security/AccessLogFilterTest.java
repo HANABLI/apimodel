@@ -14,46 +14,45 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Optional.ofNullable;
+
+
 public class AccessLogFilterTest {
 
-    @Test
-    public void testFilterNoUser() {
+    private String test(RapidApiPrincipal principal, String method, String path) {
         List<String> logList = new ArrayList<>();
         AccessLogFilter accessLogFilter = new AccessLogFilter(logList::add);
-
-        Principal principal = new RapidApiPrincipal("proxy-secret", "user", Subscription.BASIC);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-
-
-        Mockito.when(securityContext.getUserPrincipal()).thenReturn(principal);
+        RapidApiSecurityContext securityContext = ofNullable(principal).map(RapidApiSecurityContext::new).orElse(null);
         UriInfo uriInfo = Mockito.mock(UriInfo.class);
-        Mockito.when(uriInfo.getAbsolutePath()).thenReturn(URI.create("https://localhost/test"));
+        Mockito.when(uriInfo.getAbsolutePath()).thenReturn(URI.create("https://localhost" + path));
         ContainerRequestContext containerRequestContext = Mockito.mock(ContainerRequestContext.class);
-        Mockito.when(containerRequestContext.getMethod()).thenReturn("GET");
+        Mockito.when(containerRequestContext.getSecurityContext()).thenReturn(securityContext);
+        Mockito.when(containerRequestContext.getMethod()).thenReturn(method);
         Mockito.when(containerRequestContext.getUriInfo()).thenReturn(uriInfo);
         accessLogFilter.filter(containerRequestContext);
 
-        Assertions.assertEquals(1, logList.size());
-        Assertions.assertEquals("? => GET /test", logList.get(0));
+        return logList.get(0);
+
+    }
+
+    @Test
+    public void testFilterNoUser() {
+
+        RapidApiPrincipal principal = new RapidApiPrincipal("proxy-secret", "user", Subscription.BASIC);
+        String log = test(principal, "GET", "/test");
+        Assertions.assertEquals("user => GET /test", log);
     }
 
     @Test
     public void testFilterWithUser() {
-        List<String> logList = new ArrayList<>();
-        AccessLogFilter accessLogFilter = new AccessLogFilter(logList::add);
 
-        Principal principal = new RapidApiPrincipal("proxy-secret", "user", Subscription.BASIC);
-        RapidApiSecurityContext securityContext = Mockito.mock(RapidApiSecurityContext.class);
-        Mockito.when(securityContext.getUserPrincipal()).thenReturn(principal);
-        UriInfo uriInfo = Mockito.mock(UriInfo.class);
-        Mockito.when(uriInfo.getAbsolutePath()).thenReturn(URI.create("https://localhost/test"));
-        ContainerRequestContext containerRequestContext = Mockito.mock(ContainerRequestContext.class);
-        Mockito.when(containerRequestContext.getSecurityContext()).thenReturn(securityContext);
-        Mockito.when(containerRequestContext.getMethod()).thenReturn("GET");
-        Mockito.when(containerRequestContext.getUriInfo()).thenReturn(uriInfo);
-        accessLogFilter.filter(containerRequestContext);
+        String log = test(null, "GET", "/test");
+        Assertions.assertEquals("? => GET /test", log);
+    }
 
-        Assertions.assertEquals(1, logList.size());
-        Assertions.assertEquals("user => GET /test", logList.get(0));
+    @Test
+    public void testFilterWithPostMethode() {
+        String log = test(null, "POST", "/test/id");
+        Assertions.assertEquals("? => POST /test", log);
     }
 }
