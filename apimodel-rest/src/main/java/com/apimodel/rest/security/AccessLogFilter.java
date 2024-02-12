@@ -1,6 +1,5 @@
 package com.apimodel.rest.security;
 
-import java.io.StreamTokenizer;
 import java.util.function.Consumer;
 
 import com.apimodel.model.RapidApiPrincipal;
