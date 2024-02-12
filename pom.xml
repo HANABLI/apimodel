@@ -16,17 +16,27 @@
     <modules>
         <module>apimodel-server</module>
         <module>apimodel-rest</module>
+        <module>apimodel-model</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <!--  -->
+            <!-- project dependencies -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>apimodel-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>apimodel-rest</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>apimodel-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-bom</artifactId>
