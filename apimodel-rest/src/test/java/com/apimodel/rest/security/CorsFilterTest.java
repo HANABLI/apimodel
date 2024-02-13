@@ -3,11 +3,12 @@ package com.apimodel.rest.security;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
 
 public class CorsFilterTest {
+
     @Test
     public void testFilter() {
         MultivaluedMap<String, Object> headerMap = new MultivaluedHashMap<>();
