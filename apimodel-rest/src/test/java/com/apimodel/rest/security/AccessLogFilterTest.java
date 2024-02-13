@@ -3,14 +3,12 @@ package com.apimodel.rest.security;
 import com.apimodel.model.RapidApiPrincipal;
 import com.apimodel.model.Subscription;
 import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.UriInfo;
 import org.junit.jupiter.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.net.URI;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +51,6 @@ public class AccessLogFilterTest {
     @Test
     public void testFilterWithPostMethode() {
         String log = test(null, "POST", "/test/id");
-        Assertions.assertEquals("? => POST /test", log);
+        Assertions.assertEquals("? => POST /test/id", log);
     }
 }
