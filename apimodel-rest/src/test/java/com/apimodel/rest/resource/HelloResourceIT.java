@@ -2,8 +2,10 @@ package com.apimodel.rest.resource;
 
 import com.apimodel.model.Subscription;
 import com.apimodel.rest.ApiApplication;
+import com.apimodel.rest.exception.ErrorResponse;
 import com.apimodel.rest.security.SecurityHeader;
 import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.jupiter.api.Assertions;
@@ -27,8 +29,10 @@ public class HelloResourceIT extends JerseyTest {
     @Test
     public void testNoSecurityHeaders() {
         Response response = target("/test").request().get();
-        Assertions.assertEquals(401, response.getStatus());
-        Assertions.assertEquals("", response.readEntity(String.class));
+        Assertions.assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
+        ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
+        Assertions.assertEquals(401, errorResponse.getStatus());
+        Assertions.assertEquals("Missing security header: X-RapidAPI-Proxy-Secret", errorResponse.getMessage());
         LOGGER.info("{}", response.getHeaders());
     }
 
@@ -37,8 +41,10 @@ public class HelloResourceIT extends JerseyTest {
         Response response = target("/test").request()
                 .header(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret")
                 .get();
-        Assertions.assertEquals(401, response.getStatus());
-        Assertions.assertEquals("", response.readEntity(String.class));
+        Assertions.assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
+        ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
+        Assertions.assertEquals(401, errorResponse.getStatus());
+        Assertions.assertEquals("Missing security header: X-RapidAPI-User", errorResponse.getMessage());
         LOGGER.info("{}", response.getHeaders());
     }
 
@@ -48,8 +54,10 @@ public class HelloResourceIT extends JerseyTest {
                 .header(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret")
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
                 .get();
-        Assertions.assertEquals(401, response.getStatus());
-        Assertions.assertEquals("", response.readEntity(String.class));
+        Assertions.assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
+        ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
+        Assertions.assertEquals(401, errorResponse.getStatus());
+        Assertions.assertEquals("Missing or invalid security header: X-RapidAPI-Subscription", errorResponse.getMessage());
         LOGGER.info("{}", response.getHeaders());
     }
 
@@ -60,8 +68,10 @@ public class HelloResourceIT extends JerseyTest {
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
                 .header(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), "invalid")
                 .get();
-        Assertions.assertEquals(401, response.getStatus());
-        Assertions.assertEquals("", response.readEntity(String.class));
+        Assertions.assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
+        ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
+        Assertions.assertEquals(401, errorResponse.getStatus());
+        Assertions.assertEquals("Missing or invalid security header: X-RapidAPI-Subscription", errorResponse.getMessage());
         LOGGER.info("{}", response.getHeaders());
     }
 
@@ -72,6 +82,7 @@ public class HelloResourceIT extends JerseyTest {
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
                 .header(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), Subscription.BASIC)
                 .get();
+        Assertions.assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("Hello", response.readEntity(String.class));
         Assertions.assertEquals("*", response.getHeaderString("Access-Control-Allow-Origin"));

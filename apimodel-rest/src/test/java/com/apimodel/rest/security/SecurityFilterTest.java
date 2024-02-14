@@ -1,11 +1,14 @@
 package com.apimodel.rest.security;
 
+import com.apimodel.model.RapidApiPrincipal;
+import com.apimodel.model.Subscription;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 
@@ -52,20 +55,22 @@ public class SecurityFilterTest {
         Assertions.assertEquals("Missing or invalid security header: X-RapidAPI-Subscription", errorMessage);
     }
 
-//    @Test
-//    public void testFilterWithAllHeaders() {
-//        RapidApiPrincipal principal = new RapidApiPrincipal("proxy-secret", "proxy-user", Subscription.BASIC);
-//        MultivaluedMap<String, String> headers = new MultivaluedHashMap<>();
-//        headers.putSingle(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), principal.getProxySecret());
-//        headers.putSingle(SecurityHeader.RAPIDAPI_USER.getHeader(), principal.getUser());
-//        headers.putSingle(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), principal.getSubscription().name());
-//
-//        ContainerRequestContext containerRequestContext = Mockito.mock(ContainerRequestContext.class);
-//        Mockito.when(containerRequestContext.getHeaders()).thenReturn(headers);
-//
-//        new SecurityFilter().filter(containerRequestContext);
-//
-//        RapidApiSecurityContext securityContext = new RapidApiSecurityContext(principal);
-//        Mockito.verify(containerRequestContext, Mockito.times(1)).setSecurityContext(ArgumentMatchers.eq(securityContext));
-//    }
+    @Test
+    public void testFilterWithAllHeaders() {
+        RapidApiPrincipal principal = new RapidApiPrincipal("proxy-secret", "proxy-user", Subscription.BASIC);
+        MultivaluedMap<String, String> headers = new MultivaluedHashMap<>();
+        headers.putSingle(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), principal.getProxySecret());
+        headers.putSingle(SecurityHeader.RAPIDAPI_USER.getHeader(), principal.getUser());
+        headers.putSingle(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), principal.getSubscription().name());
+
+        ContainerRequestContext containerRequestContext = Mockito.mock(ContainerRequestContext.class);
+        Mockito.when(containerRequestContext.getHeaders()).thenReturn(headers);
+
+
+        new SecurityFilter().filter(containerRequestContext);
+
+
+        RapidApiSecurityContext securityContext = new RapidApiSecurityContext(principal);
+        Mockito.verify(containerRequestContext, Mockito.times(1)).setSecurityContext(ArgumentMatchers.refEq(securityContext));
+    }
 }
