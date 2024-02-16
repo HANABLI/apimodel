@@ -18,9 +18,9 @@
 -- */
 
 CREATE TABLE IF NOT EXISTS todo_lists (
-    user_id  TEXT NOT NULL PRIMARY KEY,
-    id       TEXT NOT NULL PRIMARY KEY,
-    name     TEXT NOT NULL
+    user_id  TEXT NOT NULL ,
+    id       TEXT NOT NULL ,
+    name     TEXT NOT NULL ,
 
     CONSTRAINT todo_lists_pk PRIMARY KEY (user_id, id)
 );

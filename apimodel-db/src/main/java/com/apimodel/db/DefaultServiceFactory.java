@@ -1,11 +1,9 @@
 package com.apimodel.db;
 
-import com.apimodel.db.ServiceFactory;
 import com.apimodel.db.service.TodoItemService;
 import com.apimodel.db.service.TodoListService;
 import com.apimodel.db.service.sqlite.SqliteTodoItemService;
 import com.apimodel.db.service.sqlite.SqliteTodoListService;
-import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
 
