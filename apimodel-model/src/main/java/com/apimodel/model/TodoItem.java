@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class TodoItem {
     private String id;
-    private String tasck;
+    private String task;
     private boolean done = false;
 
     public String getId() {
@@ -16,12 +16,12 @@ public class TodoItem {
         return this;
     }
 
-    public String getTasck() {
-        return tasck;
+    public String getTask() {
+        return task;
     }
 
-    public TodoItem setTasck(String tasck) {
-        this.tasck = tasck;
+    public TodoItem setTask(String tasck) {
+        this.task = tasck;
         return this;
     }
 
@@ -39,19 +39,19 @@ public class TodoItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TodoItem todoItem = (TodoItem) o;
-        return done == todoItem.done && Objects.equals(id, todoItem.id) && Objects.equals(tasck, todoItem.tasck);
+        return done == todoItem.done && Objects.equals(id, todoItem.id) && Objects.equals(task, todoItem.task);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, tasck, done);
+        return Objects.hash(id, task, done);
     }
 
     @Override
     public String toString() {
         return "TodoItem{" +
                 "id='" + id + '\'' +
-                ", tasck='" + tasck + '\'' +
+                ", task='" + task + '\'' +
                 ", done=" + done +
                 '}';
     }
