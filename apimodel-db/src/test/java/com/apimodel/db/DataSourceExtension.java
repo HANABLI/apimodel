@@ -26,7 +26,7 @@ public class DataSourceExtension implements BeforeAllCallback, BeforeEachCallbac
     public void beforeAll(ExtensionContext extensionContext) {
         Flyway.configure()
                 .dataSource(dataSource)
-                .locations("db/migration/todo")
+                .locations("filesystem:src/main/resources/db/migration")
                 .load()
                 .migrate();
     }
