@@ -4,6 +4,8 @@ import com.apimodel.model.Subscription;
 import com.apimodel.rest.ApiApplication;
 import com.apimodel.rest.exception.ErrorResponse;
 import com.apimodel.rest.security.SecurityHeader;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.logging.LogManager;
+import java.util.Properties;
 
 public class HelloResourceIT extends JerseyTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloResourceIT.class);
@@ -23,7 +26,10 @@ public class HelloResourceIT extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ApiApplication();
+        Properties properties = new Properties();
+
+        Config config = ConfigFactory.parseProperties(properties);
+        return new ApiApplication(config);
     }
 
     @Test

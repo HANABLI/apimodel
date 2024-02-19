@@ -2,8 +2,6 @@ package com.apimodel.server;
 
 
 import com.apimodel.rest.ApiApplication;
-import com.apimodel.server.config.ConfigKey;
-import com.apimodel.server.config.SystemKey;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.eclipse.jetty.server.*;
@@ -20,9 +18,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 
-import static com.apimodel.server.config.ConfigKey.*;
-import static com.apimodel.server.config.SystemKey.MODE;
-import static com.apimodel.server.config.SystemKey.PORT;
+import static com.apimodel.model.config.ConfigKey.*;
+import static com.apimodel.model.config.SystemKey.MODE;
+import static com.apimodel.model.config.SystemKey.PORT;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 import static org.eclipse.jetty.http.HttpScheme.HTTPS;
@@ -67,7 +65,8 @@ public class ModelAPIServer {
 
         server.setHandler(servletContextHandler);
 
-        ServletHolder apiServletHolder = servletContextHandler.addServlet(ServletContainer.class, API_PATTERN);
+        ServletHolder apiServletHolder = new ServletHolder(new ServletContainer(new ApiApplication(config)));
+        servletContextHandler.addServlet(ServletContainer.class, API_PATTERN);
 
 
         apiServletHolder.setInitParameter(ServletProperties.JAXRS_APPLICATION_CLASS, ApiApplication.class.getName());
