@@ -1,5 +1,6 @@
-package com.apimodel.server.config;
+package com.apimodel.model.config;
 
+import com.apimodel.model.config.SystemKey;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

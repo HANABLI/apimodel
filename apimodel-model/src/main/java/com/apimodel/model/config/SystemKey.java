@@ -1,4 +1,4 @@
-package com.apimodel.server.config;
+package com.apimodel.model.config;
 
 import static java.util.Locale.ENGLISH;
 
