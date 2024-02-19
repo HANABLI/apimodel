@@ -23,7 +23,6 @@ public class SqliteTodoListServiceIT {
     private final RapidApiPrincipal principal2 = new RapidApiPrincipal("proxy-secret", "user2", Subscription.BASIC);
     public SqliteTodoListServiceIT(DataSource dataSource) {
         this.service = new SqliteTodoListService(dataSource);
-
     }
 
     @Test
@@ -49,7 +48,7 @@ public class SqliteTodoListServiceIT {
     }
 
     @Test
-    public void testGetWhithOneList() {
+    public void testGetWithOneList() {
         TodoList list = new TodoList().setId("id").setName("name");
         Assertions.assertTrue(service.create(principal1, list));
 
@@ -87,7 +86,7 @@ public class SqliteTodoListServiceIT {
         TodoList list = new TodoList().setId("id").setName("name");
         Assertions.assertTrue(service.create(principal1, list));
 
-        List<TodoList> fetched = service.getAll(principal2);
+        List<TodoList> fetched = service.getAll(principal1);
         Assertions.assertEquals(1, fetched.size());
         Assertions.assertEquals(list, fetched.get(0));
     }
@@ -105,13 +104,68 @@ public class SqliteTodoListServiceIT {
     }
 
     @Test
-    public void
+    public void testCreateConflictDifferentName() {
+        TodoList list1 = new TodoList().setId("id").setName("name1");
+        TodoList list2 = new TodoList().setId("id").setName("name2");
+        Assertions.assertTrue(service.create(principal1, list1));
+        ConflictException exception = Assertions.assertThrows(ConflictException.class,
+                () -> service.create(principal1, list2));
+        Assertions.assertEquals("Todo list already exists", exception.getMessage());
+    }
 
-//    @Test
-//    public void testCreate() {
-//        TodoList list = new TodoList().setId("id1").setName("name1");
-//        boolean isCrated = this.service.create(principal, list);
-//        Assertions.assertTrue(isCrated);
-//    }
+    @Test
+    public void testCreateConflictDifferentUser() {
+        TodoList list = new TodoList().setId("id").setName("name");
+        Assertions.assertTrue(service.create(principal1, list));
+        Assertions.assertTrue(service.create(principal2, list));
 
+        Optional<TodoList> fetched1 = service.get(principal1, list.getId());
+        Optional<TodoList> fetched2 = service.get(principal2, list.getId());
+        Assertions.assertTrue(fetched1.isPresent());
+        Assertions.assertTrue(fetched2.isPresent());
+    }
+
+    @Test
+    public void testUpdateMissingTodoList() {
+        TodoList list = new TodoList().setId("id").setName("name");
+        Assertions.assertFalse(service.update(principal1, list));
+    }
+
+    @Test
+    public void testUpdateExistsButSame() {
+        TodoList list = new TodoList().setId("id").setName("name");
+        Assertions.assertTrue(service.create(principal1, list));
+        Assertions.assertFalse(service.update(principal1, list));
+    }
+
+    @Test
+    public void testUpdateDifferentName() {
+        TodoList list = new TodoList().setId("id").setName("name");
+        Assertions.assertTrue(service.create(principal1, list));
+        list.setName("updatedName");
+        Assertions.assertTrue(service.update(principal1, list));
+
+        Optional<TodoList> fetched = service.get(principal1, list.getId());
+        Assertions.assertTrue(fetched.isPresent());
+        Assertions.assertEquals(list.getName(), fetched.get().getName());
+    }
+
+    @Test
+    public void testDeleteExistedTodoList() {
+        TodoList list = new TodoList().setId("id").setName("name");
+        Assertions.assertTrue(service.create(principal1, list));
+        Assertions.assertTrue(service.delete(principal1, list.getId()));
+
+        Optional<TodoList> fetched = service.get(principal1, list.getId());
+        Assertions.assertTrue(fetched.isEmpty());
+    }
+
+    @Test
+    public void testDeleteUnExistingToDoList() {
+        TodoList list = new TodoList().setId("id").setName("name");
+        Assertions.assertFalse(service.delete(principal1, list.getId()));
+
+        Optional<TodoList> fetched = service.get(principal1, list.getId());
+        Assertions.assertTrue(fetched.isEmpty());
+    }
 }
