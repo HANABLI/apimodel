@@ -15,7 +15,7 @@ public class DefaultServiceFactory implements ServiceFactory {
     public DefaultServiceFactory(DataSource dataSource) {
         Flyway.configure()
                 .dataSource(dataSource)
-                .locations("filesystem:src/main/resources/db/migration")
+                .locations("db/migration")
                 .load()
                 .migrate();
         todoItemService = new SqliteTodoItemService(dataSource);

@@ -3,6 +3,7 @@ package com.apimodel.rest.security;
 import java.util.function.Consumer;
 
 import com.apimodel.model.RapidApiPrincipal;
+import jakarta.annotation.Priority;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.stream.Stream;
 
 @Provider
+@Priority(2)
 public class AccessLogFilter implements ContainerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger("access-log");
 

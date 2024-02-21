@@ -10,7 +10,6 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sqlite.JDBC;
 
 import javax.sql.DataSource;
 
@@ -32,8 +31,8 @@ public class ApiApplication extends ResourceConfig {
     private ServiceFactory createServiceFactory(Config config) {
 
         HikariConfig dbConfig = new HikariConfig();
-        dbConfig.setDriverClassName(JDBC.class.getName());
-        dbConfig.setJdbcUrl(config.getString(ConfigKey.DB_DRIVER.getKey()));
+        dbConfig.setDriverClassName(config.getString(ConfigKey.DB_DRIVER.getKey()));
+        dbConfig.setJdbcUrl(config.getString(ConfigKey.DB_URL.getKey()));
         dbConfig.setUsername(config.getString(ConfigKey.DB_USERNAME.getKey()));
         dbConfig.setPassword(config.getString(ConfigKey.DB_PASSWORD.getKey()));
         dbConfig.setAutoCommit(false);

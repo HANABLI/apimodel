@@ -12,6 +12,10 @@
         <!-- Project dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>apimodel-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>apimodel-rest</artifactId>
         </dependency>
 
@@ -74,12 +78,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-        <!-- Used for testing -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-        </dependency>
-
 
     </dependencies>
     <build>

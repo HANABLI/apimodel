@@ -15,8 +15,10 @@ import org.glassfish.jersey.servlet.ServletProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 
 import static com.apimodel.model.config.ConfigKey.*;
 import static com.apimodel.model.config.SystemKey.MODE;
@@ -66,10 +68,9 @@ public class ModelAPIServer {
         server.setHandler(servletContextHandler);
 
         ServletHolder apiServletHolder = new ServletHolder(new ServletContainer(new ApiApplication(config)));
-        servletContextHandler.addServlet(ServletContainer.class, API_PATTERN);
+        servletContextHandler.addServlet(apiServletHolder, API_PATTERN);
 
-
-        apiServletHolder.setInitParameter(ServletProperties.JAXRS_APPLICATION_CLASS, ApiApplication.class.getName());
+        //apiServletHolder.setInitParameter(ServletProperties.JAXRS_APPLICATION_CLASS, ApiApplication.class.getName());
 
         return server;
     }
@@ -77,11 +78,14 @@ public class ModelAPIServer {
     public static void main(String...  args) throws Exception {
         int port = Integer.parseInt(ofNullable(System.getProperty(PORT.getKey())).orElse(PORT.getDefaultValue()));
         String mode = ofNullable(System.getProperty(MODE.getKey())).orElse(MODE.getDefaultValue());
-        String url = format("https://raw.githubusercontent.com/HANABLI/apimodel/main/system-%s.properties", mode);
-        Config config = ConfigFactory.parseURL(new URL(url));
-        LOGGER.info("Keystore: {}", config.getString(SERVER_KEYSTORE_FILE.getKey()));
+        //String url = format("https://raw.githubusercontent.com/HANABLI/apimodel/main/system-%s.properties", mode);
+        String fileName = format("C:/Users/hatem.nabli/Documents/3_Dev/apimodel/apimodel/system-%s.properties", mode);
+        File confFile = new File(fileName);
+        //Config config = ConfigFactory.parseURL(new URL(url));
+        Config config1 = ConfigFactory.parseFile(confFile);
+        LOGGER.info("Keystore: {}", config1.getString(SERVER_KEYSTORE_FILE.getKey()));
 
-        Server server = createJettyServer(port, config);
+        Server server = createJettyServer(port, config1);
 
         LOGGER.info("Server starting in port : {}", port); //Using string interpolation
         server.start();

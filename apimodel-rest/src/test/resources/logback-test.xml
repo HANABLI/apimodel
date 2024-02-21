@@ -13,4 +13,7 @@
     <logger name="access-log" level="WAR"/>
     <logger name="com.apimodel" level="OFF"/>
     <logger name="org.eclipse.jetty" level="WARN"/>
+    <logger name="com.zaxxer" level="INFO"/>
+    <logger name="org.flywaydb" level="INFO"/>
+    <logger name="org.sqlite" level="INFO"/>
 </configuration>
