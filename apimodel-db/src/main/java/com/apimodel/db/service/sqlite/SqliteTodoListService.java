@@ -102,21 +102,23 @@ public class SqliteTodoListService implements TodoListService {
     }
 
     @Override
-    public boolean delete(RapidApiPrincipal principal, String id) {
+    public Optional<TodoList> delete(RapidApiPrincipal principal, String id) {
         String sql = "DELETE FROM todo_lists WHERE user_id = ? AND id = ?";
-        try (Connection connection = dataSource.getConnection();
-        PreparedStatement ps = connection.prepareStatement(sql)) {
-            int paramIndex = 0;
-            ps.setString(++paramIndex, principal.getUser());
-            ps.setString(++paramIndex, id);
-            if (ps.executeUpdate() > 0) {
-                connection.commit();
-                return true;
+        Optional<TodoList> fetched = get(principal, id);
+        if (fetched.isPresent()) {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+                int paramIndex = 0;
+                ps.setString(++paramIndex, principal.getUser());
+                ps.setString(++paramIndex, id);
+                if (ps.executeUpdate() > 0) {
+                    connection.commit();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException("Failed to delete item " + id + " from data base:" + e.getMessage(), e);
             }
-            return false;
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to delete item "+ id +" from data base:" + e.getMessage(), e);
         }
+        return fetched;
     }
 
     @Override

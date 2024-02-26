@@ -8,6 +8,10 @@
 
     <artifactId>apimodel-model</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
         <!-- Used for testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

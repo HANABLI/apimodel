@@ -1,4 +1,4 @@
-package com.apimodel.rest.resource.v1;
+package com.apimodel.rest.resource.v1.lists;
 
 
 import com.apimodel.db.ServiceFactory;

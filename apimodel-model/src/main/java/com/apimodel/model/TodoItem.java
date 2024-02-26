@@ -20,8 +20,8 @@ public class TodoItem {
         return task;
     }
 
-    public TodoItem setTask(String tasck) {
-        this.task = tasck;
+    public TodoItem setTask(String task) {
+        this.task = task;
         return this;
     }
 

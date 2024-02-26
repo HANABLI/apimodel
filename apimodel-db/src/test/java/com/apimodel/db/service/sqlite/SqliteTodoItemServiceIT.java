@@ -56,7 +56,9 @@ public class SqliteTodoItemServiceIT {
 
     @Test
     public void testGetAllNoItems() {
-        List<TodoItem> fetchedItems = todoItemService.getAll(principal1);
+        TodoList list = new TodoList().setId("id").setName("name");
+        Assertions.assertTrue(todoListService.create(principal1, list));
+        List<TodoItem> fetchedItems = todoItemService.getAll(principal1, list.getId());
         Assertions.assertTrue(fetchedItems.isEmpty());
     }
 
@@ -68,7 +70,7 @@ public class SqliteTodoItemServiceIT {
         TodoItem item2 = new TodoItem().setId("id2").setTask("task2").setDone(false);
         Assertions.assertTrue(todoItemService.create(principal1, list.getId(), item1));
         Assertions.assertTrue(todoItemService.create(principal1, list.getId(), item2));
-        List<TodoItem> todoItems = todoItemService.getAll(principal2);
+        List<TodoItem> todoItems = todoItemService.getAll(principal2, list.getId());
         Assertions.assertTrue(todoItems.isEmpty());
     }
 
@@ -80,10 +82,10 @@ public class SqliteTodoItemServiceIT {
         TodoItem item2 = new TodoItem().setId("id2").setTask("task2").setDone(false);
         Assertions.assertTrue(todoItemService.create(principal1, list.getId(), item1));
         Assertions.assertTrue(todoItemService.create(principal1, list.getId(), item2));
-        List<TodoItem> todoItems = todoItemService.getAll(principal1);
+        List<TodoItem> todoItems = todoItemService.getAll(principal1, list.getId());
         Assertions.assertEquals(todoItems.size(), 2);
-        Assertions.assertTrue(todoItemService.delete(principal1, list.getId(), item2.getId()));
-        Assertions.assertEquals(todoItemService.getAll(principal1).size(), 1);
+        Assertions.assertTrue(todoItemService.delete(principal1, list.getId(), item2.getId()).isPresent());
+        Assertions.assertEquals(todoItemService.getAll(principal1, list.getId()).size(), 1);
     }
 
     @Test
@@ -157,7 +159,7 @@ public class SqliteTodoItemServiceIT {
         TodoList list = new TodoList().setId("id").setName("name");
         Assertions.assertTrue(todoListService.create(principal1, list));
         TodoItem item = new TodoItem().setId("id").setTask("task").setDone(false);
-        Assertions.assertFalse(todoItemService.delete(principal1, list.getId(), item.getId()));
+        Assertions.assertFalse(todoItemService.delete(principal1, list.getId(), item.getId()).isPresent());
     }
 
     @Test
@@ -166,7 +168,7 @@ public class SqliteTodoItemServiceIT {
         Assertions.assertTrue(todoListService.create(principal1, list));
         TodoItem item = new TodoItem().setId("id").setTask("task").setDone(false);
         Assertions.assertTrue(todoItemService.create(principal1, list.getId(), item));
-        Assertions.assertTrue(todoItemService.delete(principal1, list.getId(), item.getId()));
+        Assertions.assertTrue(todoItemService.delete(principal1, list.getId(), item.getId()).isPresent());
     }
 
     @Test

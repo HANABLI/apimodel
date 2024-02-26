@@ -1,9 +1,16 @@
 package com.apimodel.model;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.util.Objects;
 
 public class TodoList {
+    @NotNull
+    @Size(max = 36, message = "Todo list id max length is 36 char")
     private String id;
+    @NotNull
+    @Size(max = 200, message = "Todo list name max length is 200 characters")
     private String name;
 
     public String getId() {

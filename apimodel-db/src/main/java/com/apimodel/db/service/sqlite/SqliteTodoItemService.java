@@ -47,12 +47,13 @@ public class SqliteTodoItemService implements TodoItemService {
     }
 
     @Override
-    public List<TodoItem> getAll(RapidApiPrincipal principal) {
-        String sql = "SELECT * FROM todo_items WHERE user_id = ? ";
+    public List<TodoItem> getAll(RapidApiPrincipal principal, String listId) {
+        String sql = "SELECT * FROM todo_items WHERE user_id = ? AND list_id = ? ORDER BY done, task";
         try (Connection connection = dataSource.getConnection();
         PreparedStatement sp = connection.prepareStatement(sql)) {
             int index = 0;
             sp.setString(++index, principal.getUser());
+            sp.setString(++index, listId);
             List<TodoItem> todoItems = new ArrayList<>();
             try (ResultSet resultSet = sp.executeQuery()){
                 while (resultSet.next()) {
@@ -121,22 +122,24 @@ public class SqliteTodoItemService implements TodoItemService {
     }
 
     @Override
-    public boolean delete(RapidApiPrincipal principal, String listId, String id) {
+    public Optional<TodoItem> delete(RapidApiPrincipal principal, String listId, String id) {
         String sql = "DELETE FROM todo_items WHERE user_id = ? AND list_id = ? AND id = ?";
-        try (Connection connection = dataSource.getConnection();
-            PreparedStatement sp = connection.prepareStatement(sql)) {
-            int index = 0;
-            sp.setString(++index, principal.getUser());
-            sp.setString(++index, listId);
-            sp.setString(++index, id);
-            if (sp.executeUpdate() > 0) {
-                connection.commit();
-                return true;
+        Optional<TodoItem> fetchedItem = get(principal, listId, id);
+        if (fetchedItem.isPresent()) {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement sp = connection.prepareStatement(sql)) {
+                int index = 0;
+                sp.setString(++index, principal.getUser());
+                sp.setString(++index, listId);
+                sp.setString(++index, id);
+                if (sp.executeUpdate() > 0) {
+                    connection.commit();
+                }
+            } catch (SQLException exception) {
+                throw new RuntimeException("Failed to delete todoItem", exception);
             }
-            return false;
-        } catch (SQLException exception) {
-            throw new RuntimeException("Failed to delete todoItem", exception);
         }
+        return fetchedItem;
     }
 
     @Override

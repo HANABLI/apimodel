@@ -154,8 +154,8 @@ public class SqliteTodoListServiceIT {
     public void testDeleteExistedTodoList() {
         TodoList list = new TodoList().setId("id").setName("name");
         Assertions.assertTrue(service.create(principal1, list));
-        Assertions.assertTrue(service.delete(principal1, list.getId()));
-
+        Optional<TodoList> deleted = service.delete(principal1, list.getId());
+        Assertions.assertTrue(deleted.isPresent());
         Optional<TodoList> fetched = service.get(principal1, list.getId());
         Assertions.assertTrue(fetched.isEmpty());
     }
@@ -163,9 +163,8 @@ public class SqliteTodoListServiceIT {
     @Test
     public void testDeleteUnExistingToDoList() {
         TodoList list = new TodoList().setId("id").setName("name");
-        Assertions.assertFalse(service.delete(principal1, list.getId()));
 
-        Optional<TodoList> fetched = service.get(principal1, list.getId());
-        Assertions.assertTrue(fetched.isEmpty());
+        Optional<TodoList> deleted = service.delete(principal1, list.getId());
+        Assertions.assertTrue(deleted.isEmpty());
     }
 }
