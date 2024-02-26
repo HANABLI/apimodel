@@ -51,6 +51,7 @@ public class PostTodoListResource {
         }
 
         RapidApiPrincipal principal = (RapidApiPrincipal) securityContext.getUserPrincipal();
+
         if (serviceFactory.getTodoListService().create(principal, todoList)) {
             return todoList;
         }
