@@ -1,0 +1,14 @@
+resourcePackages:
+  - com.apimodel.rest
+prettyPrint: true
+cacheTTL: 0
+openAPI:
+  info:
+    version: '${project.version}'
+    title: Swagger model api
+    description: 'This is a sample model api project'
+    contact:
+      email: support@modelapi.io
+    license:
+      name: Apache 2.0
+      url: http://www.apache.org/licenses/LICENSE-2.0.html
