@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 
-@Path("/vi/lists/{id}")
+@Path("/v1/lists/{listId}")
 public class GetTodoListResource {
     private final ServiceFactory serviceFactory;
 
@@ -22,9 +22,9 @@ public class GetTodoListResource {
 
     @GET
     @Produces(APPLICATION_JSON)
-    public TodoList getTodoList(@Context SecurityContext securityContext, @PathParam("id") String todoListId) {
+    public TodoList getTodoList(@Context SecurityContext securityContext, @PathParam("listId") String todoListId) {
         return serviceFactory.getTodoListService().get((RapidApiPrincipal) securityContext.getUserPrincipal(), todoListId)
-                .orElseThrow(() -> new NotFoundException("List with id " + todoListId + "not found"));
+                .orElseThrow(() -> new NotFoundException("List with id " + todoListId + " not found"));
     }
 
 }
