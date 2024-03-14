@@ -50,7 +50,7 @@ public class SecurityFilterTest {
         MultivaluedMap<String, String> headers = new MultivaluedHashMap<>();
         headers.putSingle(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret");
         headers.putSingle(SecurityHeader.RAPIDAPI_USER.getHeader(), "proxy-user");
-        headers.putSingle(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), "invalid");
+        headers.putSingle(SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), "invalid");
         String errorMessage = testNotAuthorized(headers);
         Assertions.assertEquals("Missing or invalid security header: X-RapidAPI-Subscription", errorMessage);
     }
@@ -61,7 +61,7 @@ public class SecurityFilterTest {
         MultivaluedMap<String, String> headers = new MultivaluedHashMap<>();
         headers.putSingle(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), principal.getProxySecret());
         headers.putSingle(SecurityHeader.RAPIDAPI_USER.getHeader(), principal.getUser());
-        headers.putSingle(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), principal.getSubscription().name());
+        headers.putSingle(SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), principal.getSubscription().name());
 
         ContainerRequestContext containerRequestContext = Mockito.mock(ContainerRequestContext.class);
         Mockito.when(containerRequestContext.getHeaders()).thenReturn(headers);

@@ -30,9 +30,12 @@ public class SecurityFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) {
+        if (containerRequestContext.getUriInfo().getRequestUri().getPath().contains("/api/openapi")) {
+            return;
+        }
         Optional<String> proxySecret = getHeader(containerRequestContext, SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader());
         Optional<String> user = getHeader(containerRequestContext, SecurityHeader.RAPIDAPI_USER.getHeader());
-        Optional<Subscription> subscription = getHeader(containerRequestContext, SecurityHeader.RAPID_SUBSCRIPTION.getHeader()).flatMap(Subscription::from);
+        Optional<Subscription> subscription = getHeader(containerRequestContext, SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader()).flatMap(Subscription::from);
 
         if (proxySecret.isEmpty()) {
             throw new NotAuthorizedException("Missing security header: " +
@@ -46,7 +49,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 
         if (subscription.isEmpty()) {
             throw new NotAuthorizedException("Missing or invalid security header: " +
-                    SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), Response.status(Response.Status.UNAUTHORIZED));
+                    SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), Response.status(Response.Status.UNAUTHORIZED));
         }
 
         RapidApiPrincipal principal = new RapidApiPrincipal(proxySecret.get(), user.get(), subscription.get());

@@ -71,7 +71,7 @@ public class GetAllTodoListsResourceIT extends BaseResourceIT {
         Response response = target("/v1/lists").request()
                 .header(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret")
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
-                .header(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), "invalid")
+                .header(SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), "invalid")
                 .get();
         verifyErrorResponse(response, UNAUTHORIZED, "Missing or invalid security header: X-RapidAPI-Subscription");
     }
@@ -82,7 +82,7 @@ public class GetAllTodoListsResourceIT extends BaseResourceIT {
         Response response = target("/v1/lists").request()
                 .header(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret")
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
-                .header(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), Subscription.BASIC)
+                .header(SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), Subscription.BASIC)
                 .get();
         Assertions.assertEquals(APPLICATION_JSON_TYPE, response.getMediaType());
         Assertions.assertEquals(OK.getStatusCode(), response.getStatus());
@@ -104,7 +104,7 @@ public class GetAllTodoListsResourceIT extends BaseResourceIT {
         Response response = target("/v1/lists").request()
                 .header(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret")
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
-                .header(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), Subscription.BASIC.name())
+                .header(SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), Subscription.BASIC.name())
                 .get();
         Assertions.assertEquals(APPLICATION_JSON_TYPE, response.getMediaType());
         Assertions.assertEquals(OK.getStatusCode(), response.getStatus());
@@ -124,7 +124,7 @@ public class GetAllTodoListsResourceIT extends BaseResourceIT {
         Response response = target("/v1/lists").request()
                 .header(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret")
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
-                .header(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), Subscription.BASIC.name())
+                .header(SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), Subscription.BASIC.name())
                 .get();
         verifyErrorResponse(response, INTERNAL_SERVER_ERROR, "Failed");
     }
@@ -138,7 +138,7 @@ public class GetAllTodoListsResourceIT extends BaseResourceIT {
         Response response = target("/v1/lists").request()
                 .header(SecurityHeader.RAPIDAPI_PROXY_SECRET.getHeader(), "proxy-secret")
                 .header(SecurityHeader.RAPIDAPI_USER.getHeader(), "user")
-                .header(SecurityHeader.RAPID_SUBSCRIPTION.getHeader(), Subscription.BASIC)
+                .header(SecurityHeader.RAPIDAPI_SUBSCRIPTION.getHeader(), Subscription.BASIC)
                 .post(entity);
 
     }
