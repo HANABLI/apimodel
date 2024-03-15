@@ -10,7 +10,9 @@ public enum ConfigKey {
     DB_DRIVER,
     DB_URL,
     DB_USERNAME,
-    DB_PASSWORD;
+    DB_PASSWORD,
+
+    RAPIDAPI_PROXY_SECRET;
 
     public String getKey() {
         return name().toLowerCase(ENGLISH).replace("_", ".");

@@ -5,9 +5,12 @@ import com.apimodel.db.service.TodoListService;
 import com.apimodel.model.RapidApiPrincipal;
 import com.apimodel.model.Subscription;
 import com.apimodel.model.TodoList;
+import com.apimodel.model.config.ConfigKey;
 import com.apimodel.rest.ApiApplication;
 import com.apimodel.rest.resource.v1.BaseResourceIT;
 import com.apimodel.rest.security.SecurityHeader;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Assertions;
@@ -15,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Optional;
+import java.util.Properties;
 
 import static jakarta.ws.rs.core.Response.Status.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +34,12 @@ public class GetTodoListResourceIT extends BaseResourceIT {
         ServiceFactory serviceFactory = Mockito.mock(ServiceFactory.class);
         todoListService = Mockito.mock(TodoListService.class);
         Mockito.when(serviceFactory.getTodoListService()).thenReturn(todoListService);
-        return new ApiApplication(serviceFactory);
+
+        Properties configProperties = new Properties();
+        configProperties.setProperty(ConfigKey.RAPIDAPI_PROXY_SECRET.getKey(), "proxy-secret");
+        Config config = ConfigFactory.parseProperties(configProperties);
+
+        return new ApiApplication(config, serviceFactory);
     }
 
     @Test

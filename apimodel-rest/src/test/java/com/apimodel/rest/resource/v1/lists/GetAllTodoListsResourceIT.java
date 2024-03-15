@@ -8,6 +8,7 @@ import com.apimodel.model.TodoList;
 import com.apimodel.rest.ApiApplication;
 import com.apimodel.rest.resource.v1.BaseResourceIT;
 import com.apimodel.rest.security.SecurityHeader;
+import com.typesafe.config.Config;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.*;
 import org.junit.jupiter.api.Assertions;
@@ -36,9 +37,10 @@ public class GetAllTodoListsResourceIT extends BaseResourceIT {
     @Override
     protected Application configure() {
         ServiceFactory serviceFactory = Mockito.mock(ServiceFactory.class);
+        Config config = Mockito.mock(Config.class);
         todoListService = Mockito.mock(TodoListService.class);
         Mockito.when(serviceFactory.getTodoListService()).thenReturn(todoListService);
-        return new ApiApplication(serviceFactory);
+        return new ApiApplication(config, serviceFactory);
     }
 
 

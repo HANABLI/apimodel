@@ -17,6 +17,16 @@
 -- * Use caps for all SQL queries
 -- */
 
+CREATE TABLE IF NOT EXISTS api_keys (
+    apikey TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    subscription TEXT NOT NULL,
+
+    CONSTRAINT api_keys_pk PRIMARY KEY (apikey)
+);
+
+CREATE INDEX api_keys_apikey_idx ON api_keys (apikey);
+
 CREATE TABLE IF NOT EXISTS todo_lists (
     user_id  TEXT NOT NULL ,
     id       TEXT NOT NULL ,

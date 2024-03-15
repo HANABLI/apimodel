@@ -19,7 +19,7 @@ public class ErrorResponse {
             name = "status",
             title = "Status",
             description = """
-                    Specifies the HTTP status code returned after the error condition. 
+                    Specifies the HTTP status code returned after the error condition.
                     """,
             example = """
                     400

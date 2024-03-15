@@ -1,5 +1,7 @@
 package com.apimodel.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
 public class TodoItem {
@@ -7,6 +9,17 @@ public class TodoItem {
     private String task;
     private boolean done = false;
 
+    @Schema(
+            name = "id",
+            title = "ID",
+            description = """
+                    The identifier used to uniquely represent this `TodoList`.
+                    """,
+            examples = """
+                    my-item-id\n
+                    57bf6b0f-3174-4f43-a827-2015978a4297
+                    """
+    )
     public String getId() {
         return id;
     }
@@ -16,6 +29,17 @@ public class TodoItem {
         return this;
     }
 
+    @Schema(
+            name = "task",
+            title = "Task",
+            description = """
+                    The task description
+                    """,
+            examples = """
+                    Call Mr Smith to ask about the delivery, check if he has find the right size of components
+                    """
+
+    )
     public String getTask() {
         return task;
     }

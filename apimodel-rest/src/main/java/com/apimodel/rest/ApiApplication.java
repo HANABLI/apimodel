@@ -8,20 +8,21 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import jakarta.ws.rs.ApplicationPath;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-
+@ApplicationPath("/api") //Only used by OpenAPI docs
 public class ApiApplication extends ResourceConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
     public ApiApplication(Config config) {
-        this(createServiceFactory(config));
+        this(config, createServiceFactory(config));
     }
 
-    public ApiApplication(ServiceFactory serviceFactory) {
+    public ApiApplication(Config config, ServiceFactory serviceFactory) {
         packages(ApiApplication.class.getPackageName());
 
         register(OpenApiResource.class);
@@ -31,6 +32,7 @@ public class ApiApplication extends ResourceConfig {
         register(new AbstractBinder() {
             @Override
             protected void configure() {
+                bind(config).to(Config.class);
                 bind(serviceFactory).to(ServiceFactory.class);
                 LOGGER.info("Configuring binder");
             }

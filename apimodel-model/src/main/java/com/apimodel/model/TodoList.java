@@ -1,5 +1,6 @@
 package com.apimodel.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,17 @@ public class TodoList {
     @Size(min = 1, max = 200, message = "Todo list name max length is 200 characters")
     private String name;
 
+    @Schema(
+            name = "id",
+            title = "ID",
+            description = """
+                    The identifier used to uniquely represent this `TodoList`.
+                    """,
+            example = """
+                    my-list-id\n
+                    18d8cb73-bf95-479a-bb7e-2b2d7e0ac256
+                    """
+    )
     public String getId() {
         return id;
     }
@@ -25,6 +37,17 @@ public class TodoList {
         return this;
     }
 
+    @Schema(
+            name = "name",
+            title = "Name",
+            description = """
+                    The name used to describe the contents of this `TodoList`.
+                    """,
+            example = """
+                Sends Emails to costumers\n
+                Go shopping
+            """
+    )
     public String getName() {
         return name;
     }

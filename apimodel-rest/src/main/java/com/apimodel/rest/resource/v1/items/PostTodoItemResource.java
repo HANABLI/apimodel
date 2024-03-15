@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.SecurityContext;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -29,11 +30,11 @@ public class PostTodoItemResource {
                                  @PathParam("listId") String listId,
                                  TodoItem todoItem) {
         RapidApiPrincipal principal = (RapidApiPrincipal) securityContext.getUserPrincipal();
-        todoItem.setId(Optional.of(todoItem.getId()).orElseGet(() -> UUID.randomUUID().toString()));
+        todoItem.setId(Optional.of(todoItem.getId()).map(StringEscapeUtils::escapeHtml4).orElseGet(() -> UUID.randomUUID().toString()));
         todoItem.setTask(Optional.of(todoItem.getTask()).orElse(null));
 
         serviceFactory.getTodoListService().get(principal, listId)
-                .orElseThrow(() -> new NotFoundException("list with id "+listId+ "not found"));
+                .orElseThrow(() -> new NotFoundException("list with id " + listId + "not found"));
         if (serviceFactory.getTodoItemService().create(principal, listId, todoItem)) {
             return todoItem;
         }

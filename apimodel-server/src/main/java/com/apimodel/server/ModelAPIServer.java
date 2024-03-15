@@ -1,7 +1,9 @@
 package com.apimodel.server;
 
 
+import ch.qos.logback.core.util.TimeUtil;
 import com.apimodel.rest.ApiApplication;
+import com.apimodel.server.task.MoemoryLogging;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.eclipse.jetty.server.*;
@@ -11,14 +13,12 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.glassfish.jersey.servlet.ServletContainer;
-import org.glassfish.jersey.servlet.ServletProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Properties;
+import java.util.concurrent.*;
 
 import static com.apimodel.model.config.ConfigKey.*;
 import static com.apimodel.model.config.SystemKey.MODE;
@@ -84,6 +84,9 @@ public class ModelAPIServer {
         //Config config = ConfigFactory.parseURL(new URL(url));
         Config config1 = ConfigFactory.parseFile(confFile);
         LOGGER.info("Keystore: {}", config1.getString(SERVER_KEYSTORE_FILE.getKey()));
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new MoemoryLogging(), 5, 120, TimeUnit.SECONDS);
 
         Server server = createJettyServer(port, config1);
 
